@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kolyre"
+version = "2.0.0"
+description = "Lightweight Python library for styling and coloring terminal text using ANSI codes, supporting standard, 256-color, and 24-bit RGB (truecolor) output."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "DevBytAmir"}]
+keywords = ["ansi", "terminal", "color", "style", "console", "text-formatting", "cli", "truecolor"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Terminals",
+    "Topic :: Text Processing",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=25.0",
+    "mypy>=1.10",
+    "pydocstyle>=6.0",
+    "pylint>=4.0",
+    "pytest>=8.0",
+    "pytest-cov>=7.0"
+]
+
+[project.scripts]
+kolyre = "kolyre.demo:main"
+
+[project.urls]
+homepage = "https://github.com/DevBytAmir/kolyre"
+repository = "https://github.com/DevBytAmir/kolyre"
+documentation = "https://github.com/DevBytAmir/kolyre#readme"
+changelog = "https://github.com/DevBytAmir/kolyre/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["kolyre*"]
+namespaces = false
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+exclude = '/(venv)/'
+
+[tool.pylint]
+max-line-length = 88
+ignore-paths = ["venv"]
+
+[tool.pydocstyle]
+convention = "google"
+match-dir = "(?!venv)"
+
+[tool.mypy]
+files = ["."]
+exclude = "venv"
+strict = true
+
+[tool.pytest.ini_options]
+addopts = "-ra -q --cov=kolyre --cov-report=term-missing"
+testpaths = ["tests"]

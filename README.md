@@ -1,10 +1,11 @@
 # Kolyre
 
-![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Platform](https://img.shields.io/badge/platform-cross--platform-607D8B?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-4CAF50?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-2.0.0-FF8C00?style=for-the-badge)
+![Python](https://img.shields.io/badge/python-3.10%2B-27496D?style=for-the-badge&logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/platform-cross--platform-455A64?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-388E3C?style=for-the-badge)
 
-**Kolyre** is a lightweight Python library for **ANSI terminal text styling and coloring**, supporting text styles, standard and extended colors, and 24-bit RGB (truecolor) output.
+**Kolyre** is a lightweight Python library for **styling and coloring terminal text using ANSI codes**, supporting standard and extended colors, text styles, and 24-bit RGB (truecolor) output.
 
 ## Features
 
@@ -13,22 +14,17 @@
 - **256-Color Palette:** Extended ANSI palette (0–255)
 - **Truecolor (RGB) Support:** 24-bit RGB for precise coloring
 - **Cross-Platform:** Works on Linux, macOS, and Windows
-- **Single File:** No dependencies; place `kolyre.py` in your project directory
+- **Package:** Installable via GitHub (no external dependencies)
 
 ## Installation
 
-Download and include `kolyre.py` in your project:
+Install Kolyre via **pip** (recommended):
 
-- **Via GitHub:**
-  Either clone the repository:
-  ```bash
-  git clone https://github.com/DevBytAmir/kolyre.git
-  cd kolyre
-  ```
-  Or download `kolyre.py` directly from [GitHub](https://github.com/DevBytAmir/kolyre).
-  Then place `kolyre.py` in your project directory.
+```bash
+pip install git+https://github.com/DevBytAmir/kolyre.git
+```
 
-No setup or external dependencies are required.
+For manual installation, download the repository from [GitHub](https://github.com/DevBytAmir/kolyre) and place the `kolyre` folder (containing `__init__.py`, `core.py`, and `demo.py`) in your project directory.
 
 ## Quick Start
 
@@ -36,44 +32,93 @@ No setup or external dependencies are required.
 from kolyre import Kolyre
 
 # Store ANSI codes in variables
-red = Kolyre.RED
-bold = Kolyre.BOLD
+red = Kolyre.Foreground.RED
+bold = Kolyre.Style.BOLD
 
 # Use variables or codes directly
-print(f"{red}Hello World{Kolyre.RESET}")
-print(f"{bold}{Kolyre.CYAN}Bold and Cyan{Kolyre.RESET}")
-print(f"{Kolyre.BG_WHITE}Text with white background{Kolyre.RESET}")
+print(f"{red}Hello World{Kolyre.Style.RESET}")
+print(f"{bold}{Kolyre.Foreground.CYAN}Bold and Cyan{Kolyre.Style.RESET}")
+print(f"{Kolyre.Background.WHITE}Text with white background{Kolyre.Style.RESET_BACKGROUND}")
 
-# Using the colorize method
-print(Kolyre.colorize("Bold, Yellow, and Underlined", Kolyre.BOLD, Kolyre.YELLOW, Kolyre.UNDERLINE))
+# Using the colorize method to combine multiple styles
+print(Kolyre.colorize("Bold, Yellow, and Underlined", Kolyre.Style.BOLD, Kolyre.Foreground.YELLOW, Kolyre.Style.UNDERLINE))
 
 # 256-color example
-fg_index = 128
-print(f"{Kolyre.foreground_256(fg_index)}Hello 256-color{Kolyre.RESET}")
+print(f"{Kolyre.foreground_256(128)}Hello 256-color{Kolyre.Style.RESET}")
 
-# Truecolor (RGB) example using a variable
+# Truecolor example using a variable
 rgb_color = (255, 100, 50)
-print(f"{Kolyre.foreground_rgb(rgb_color)}Hello RGB{Kolyre.RESET}")
+print(f"{Kolyre.foreground_rgb(rgb_color)}Hello RGB{Kolyre.Style.RESET}")
 
 # Truecolor example parameter by parameter
-print(f"{Kolyre.foreground_rgb(50, 200, 150)}Hello RGB{Kolyre.RESET}")
+print(f"{Kolyre.background_rgb(50, 200, 150)}Hello RGB{Kolyre.Style.RESET}")
+
+# Truecolor example using hex
+print(f"{Kolyre.foreground_rgb("#FF8800")}Hello Hex RGB{Kolyre.Style.RESET}")
 ```
 
 ## Demo
 
-Run the demo to display all available text styles and colors:
+Kolyre includes a built-in demo showcasing:
 
-1. Open a terminal or command prompt.
-2. Navigate to the directory containing `kolyre.py`.
-3. Execute the script:
-    ```bash
-    python kolyre.py
-    ```
+- Text styles (bold, italic, underline, etc.)
+- Standard 16-color palette
+- 256-color palette
+- Truecolor (RGB) gradients
+
+### Demo Execution
+
+#### Installed via pip
+
+Run the demo from anywhere:
+
+```bash
+kolyre --all
+```
+
+#### Local Clone Execution
+
+If you cloned the repository and have not installed the package, run from the project root:
+
+```bash
+python -m kolyre.demo --all
+```
+
+This launches the full demo and previews all available styling features.
+
+### Command-Line Options
+
+You can run individual demo parts or modify execution behavior:
+
+```bash
+kolyre --styles       # Show all text styles
+kolyre --palette16    # Show 16-color ANSI palette
+kolyre --palette256   # Show extended 256-color palette
+kolyre --rgb          # Show truecolor RGB gradient
+kolyre --all          # Run all demos
+kolyre --force        # Force execution even if ANSI support is unavailable
+```
+
+#### Customizing the RGB Gradient
+
+```bash
+kolyre --rgb --rgb-step 51 --rgb-block-fg ABC --rgb-block-bg XYZ
+```
+
+- `--rgb-step N` sets the step size for RGB components (1–255, default 51).  
+- `--rgb-block-fg BLOCK` specifies the text for the foreground RGB gradient.  
+- `--rgb-block-bg BLOCK` specifies the text for the background RGB gradient.
 
 ## Notes
 
-- Truecolor (RGB) support may vary depending on your terminal.
-- On Windows, calling `Kolyre.enable_ansi_support()` is sometimes necessary to display colors correctly.
+- Truecolor (RGB) support may vary depending on your terminal emulator.
+- On Windows, calling `Kolyre.enable_ansi_support()` may be necessary in older or non-VT enabled consoles.
+- You can set `Kolyre.FORCE_COLOR = True` to override automatic terminal capability detection and force ANSI output.
+
+## References
+
+- **ANSI Escape Codes:** Comprehensive overview of ANSI escape sequences for text styling and terminal colors. See the [Wikipedia page on ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code).  
+- **Windows ANSI Support:** Official Microsoft documentation on enabling ANSI escape sequences in Windows consoles. See [Microsoft Console Modes](https://learn.microsoft.com/en-us/windows/console/setconsolemode).  
 
 ## License
 
